@@ -7,7 +7,7 @@ document.body.innerHTML = `
 // Create the button element
 const button = document.createElement("button");
 //add css class "frogClicker" to button
-button.classList.add('frogClicker');
+button.classList.add("frogClicker");
 
 // Add a click event listener
 button.addEventListener("click", () => {

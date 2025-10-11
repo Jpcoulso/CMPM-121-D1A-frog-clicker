@@ -8,9 +8,9 @@
 .frogClicker {
   width: 400px;
   height: 400px;
-  background-image: url('./src/assets/frogFace.jpg');
+  background-image: url("./src/assets/frogFace.jpg");
   background-size: cover;
-  border: 3px solid #4CAF50;
+  border: 3px solid #4caf50;
   border-radius: 15px;
   cursor: pointer;
   margin: 10px;
