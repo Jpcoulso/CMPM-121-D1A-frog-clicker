@@ -36,9 +36,28 @@ button.addEventListener("click", () => {
   count++;
   display.textContent = `${count} Frogs`;
 });
-
+/*
 // create 'increment timer' function which increases # of frogs +1/second
 const _incrementTimer = setInterval(() => {
   count++;
   displayUpdate();
 }, 1000);
+*/
+
+// build increment timer that uses requestAnimationFrame and uses delta time
+let lastTime = performance.now();
+
+const update = (currentTime: number) => {
+  // compute delta time
+  const deltaTime = (currentTime - lastTime) / 1000;
+  lastTime = currentTime;
+  // add fractional amount to count
+  count += deltaTime;
+  // update display using three decimal places
+  display.textContent = `${count.toFixed(3)} Frogs`;
+  // schedule next frame
+  requestAnimationFrame(update);
+};
+
+// first call to requestAnimationFrame, subsequent calls made from within 'update' function
+requestAnimationFrame(update);
