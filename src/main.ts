@@ -1,63 +1,73 @@
+/*
 import exampleIconUrl from "./noun-paperclip-7598668-00449F.png";
 import "./style.css";
 
 document.body.innerHTML = `
   <p>Example image asset: <img src="${exampleIconUrl}" class="icon" /></p>
 `;
-
-// create counter display
-const display = document.createElement("div");
+*/
+import "./style.css";
 
 // create count variable to track number of frogs
 let count: number = 0;
 
-// create display update function
-const displayUpdate = () => {
-  display.textContent = `${count} Frogs`;
-};
 
-// call displayupdate() to get initial display of count (when count is zero)
-displayUpdate();
+// -------------CREATE COUNTER DISPLAY------------------
+const counterDisplay = document.createElement("div");
+document.body.appendChild(counterDisplay);
+// create counterDisplay update function
+counterDisplay.textContent = `${count.toFixed(2)} Frogs`;
 
-// append display to body so it shows up
-document.body.appendChild(display);
 
-// Create the button element
-const button = document.createElement("button");
-//add css class "frogClicker" to button
-button.classList.add("frogClicker");
+//---------DISPLAY UPDATE FUNCTION----------
+function updateCount(newCount: number) { 
+  count = newCount;
+  counterDisplay.textContent = `${count.toFixed(2)} Frogs`;
+  pondButton.disabled = count < 10;
+}
 
-// Append it to the body (or any container)
-document.body.appendChild(button);
 
-// Add a click event listener
+ // -----------CREATE FROG BUTTON-----------------------
+// Create the button element, add css style, append so it shows up
+const frogButton = document.createElement("button");
+frogButton.classList.add("frogClicker");
+document.body.appendChild(frogButton);
 // On click increase count by 1
-button.addEventListener("click", () => {
-  count++;
-  display.textContent = `${count} Frogs`;
+frogButton.addEventListener("click", () => {
+  updateCount(count += 1);
 });
-/*
-// create 'increment timer' function which increases # of frogs +1/second
-const _incrementTimer = setInterval(() => {
-  count++;
-  displayUpdate();
-}, 1000);
-*/
 
-// build increment timer that uses requestAnimationFrame and uses delta time
-let lastTime = performance.now();
 
-const update = (currentTime: number) => {
-  // compute delta time
-  const deltaTime = (currentTime - lastTime) / 1000;
-  lastTime = currentTime;
-  // add fractional amount to count
-  count += deltaTime;
-  // update display using three decimal places
-  display.textContent = `${count.toFixed(3)} Frogs`;
-  // schedule next frame
+//-------AUTO INCREMENT COUNT BASED ON TIME DELTA-----------------
+function startIncrease(): void { 
+  // build increment timer that uses requestAnimationFrame and uses delta time
+  let lastTime = performance.now();
+  // updates count based on timeDelta
+  const update = (currentTime: number) => {
+    // compute delta time
+    const deltaTime = (currentTime - lastTime) / 1000;
+    lastTime = currentTime;
+    // add fractional amount to count
+    updateCount(count += deltaTime)
+    // schedule next frame
+    requestAnimationFrame(update); // requestAnimationUpdate feeds currentTime to update function
+  };
+  // first call to requestAnimationFrame, subsequent calls made from within 'update' function
   requestAnimationFrame(update);
-};
+}
 
-// first call to requestAnimationFrame, subsequent calls made from within 'update' function
-requestAnimationFrame(update);
+
+// ---------------BUY POND BUTTON--------------------------------
+// create 'buy pond' button, its disabled until frogs = 10;
+const pondButton = document.createElement("button");
+pondButton.textContent = "Buy Pond, cost: 10 Frogs";
+pondButton.disabled = true;
+document.body.append(pondButton); // code for when button becomes clickable in "button click" listener
+
+// when purchased begin to auto increment frog count
+pondButton.addEventListener("click", () => {
+  updateCount(count -= 10);
+  startIncrease();
+});
+
+
