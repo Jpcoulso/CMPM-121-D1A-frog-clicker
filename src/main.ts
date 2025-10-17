@@ -9,7 +9,8 @@ document.body.innerHTML = `
 import "./style.css";
 
 // create count variable to track number of frogs
-let count: number = 30000; // ---------------------------CHANGE ME BACK TO 0!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+let count: number = 0; // ---------------------------CHANGE ME BACK TO 0!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+let growthRate = 0;
 const POND_MODIFIER = 0.1;
 const SWAMP_MODIFIER = 2;
 const MARSH_MODIFIER = 50;
@@ -27,10 +28,20 @@ document.body.appendChild(counterDisplay);
 // create counterDisplay update function
 counterDisplay.textContent = `${count.toFixed(2)} Frogs`;
 
+//------------CREATE FROGS/SEC DISPLAY
+const growthRateDisplay = document.createElement("div");
+document.body.appendChild(growthRateDisplay);
+growthRateDisplay.textContent = `${growthRate.toFixed(2)} Frogs/sec`;
+
 //---------DISPLAY UPDATE FUNCTION----------
 function updateCount(newCount: number) {
-  count = newCount;
+  if (newCount < 0) {
+    count = 0;
+  } else {
+    count = newCount;
+  }
   counterDisplay.textContent = `${count.toFixed(2)} Frogs`;
+  growthRateDisplay.textContent = `${growthRate.toFixed(2)} Frogs/sec`;
   pondButton.textContent = `Buy Pond, cost: ${
     pondCost.toFixed(2)
   } Frogs, units: ${pondUnits}`;
@@ -122,6 +133,8 @@ pondButton.addEventListener("click", () => {
   autoIncreasePond();
   pondUnits++;
   pondCost = pondCost * COST_MULTIPLIER;
+  // update growth rate
+  growthRate = growthRate + POND_MODIFIER;
 });
 
 // ---------------BUY SWAMP BUTTON--------------------------------
@@ -137,6 +150,8 @@ swampButton.addEventListener("click", () => {
   autoIncreaseSwamp();
   swampUnits++;
   swampCost = swampCost * COST_MULTIPLIER;
+  // update growth rate
+  growthRate = growthRate + SWAMP_MODIFIER;
 });
 
 // ---------------BUY MARSH BUTTON--------------------------------
@@ -152,6 +167,8 @@ marshButton.addEventListener("click", () => {
   autoIncreaseMarsh();
   marshUnits++;
   marshCost = marshCost * COST_MULTIPLIER;
+  // update growth rate
+  growthRate = growthRate + MARSH_MODIFIER;
 
   // step 7 complete, just add The current growth rate (e.g. “1.2 cookies/sec”) for step 6------------------------------START HERE-------------------------------
 });
