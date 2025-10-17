@@ -1,15 +1,7 @@
-/*
-import exampleIconUrl from "./noun-paperclip-7598668-00449F.png";
-import "./style.css";
-
-document.body.innerHTML = `
-  <p>Example image asset: <img src="${exampleIconUrl}" class="icon" /></p>
-`;
-*/
 import "./style.css";
 
 // create count variable to track number of frogs
-let count: number = 0; // ---------------------------CHANGE ME BACK TO 0!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+let count: number = 0;
 let growthRate = 0;
 const POND_MODIFIER = 0.1;
 const SWAMP_MODIFIER = 2;
