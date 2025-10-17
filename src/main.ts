@@ -169,6 +169,4 @@ marshButton.addEventListener("click", () => {
   marshCost = marshCost * COST_MULTIPLIER;
   // update growth rate
   growthRate = growthRate + MARSH_MODIFIER;
-
-  // step 7 complete, just add The current growth rate (e.g. “1.2 cookies/sec”) for step 6------------------------------START HERE-------------------------------
 });
