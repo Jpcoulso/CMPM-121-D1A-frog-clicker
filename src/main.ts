@@ -5,11 +5,7 @@ let count: number = 0;
 let growthRate = 0;
 const COST_MULTIPLIER = 1.15;
 
-const upgradeButtons: { [key: string]: HTMLButtonElement } = {
-  pond: document.getElementById("pondButton") as HTMLButtonElement,
-  swamp: document.getElementById("swampButton") as HTMLButtonElement,
-  marsh: document.getElementById("marshButton") as HTMLButtonElement,
-};
+// here lies upgrade buttons dictionary
 
 interface upgrade {
   name: string;
@@ -23,6 +19,49 @@ const availableUpgrades: upgrade[] = [
   { name: "swamp", cost: 100, rate: 2, units: 0 },
   { name: "marsh", cost: 1000, rate: 50, units: 0 },
 ];
+
+//------------------------------------------------------------------------------------------------------------------------------FUNCTIONS----------------------------------------------------
+
+//---------------------------------------------------------------------REFACTORED AUTO INCREMENT FUNCTION----------------
+function autoIncrease(upgradeType: upgrade): void {
+  // build increment timer that uses requestAnimationFrame and uses delta time
+  let lastTime = performance.now();
+  // updates count based on timeDelta
+  const update = (currentTime: number) => {
+    // compute delta time
+    const deltaTime = (currentTime - lastTime) / 1000;
+    lastTime = currentTime;
+    // add fractional amount to count
+    updateCount(count += upgradeType.rate * deltaTime, availableUpgrades);
+    // schedule next frame
+    requestAnimationFrame(update); // requestAnimationUpdate feeds currentTime to update function
+  };
+  // first call to requestAnimationFrame, subsequent calls made from within 'update' function
+  requestAnimationFrame(update);
+}
+
+//-----------------------------------------------------------------------REFACTORED DISPLAY UPDATE FUNCTION--------------
+function updateCount(newCount: number, upgradeArr: upgrade[]) {
+  if (newCount < 0) {
+    count = 0;
+  } else {
+    count = newCount;
+  }
+  counterDisplay.textContent = `${count.toFixed(2)} Frogs`;
+  growthRateDisplay.textContent = `${growthRate.toFixed(2)} Frogs/sec`;
+  pondButton.textContent = `Buy Pond, cost: ${
+    upgradeArr[0].cost.toFixed(2)
+  } Frogs, units: ${upgradeArr[0].units}`;
+  swampButton.textContent = `Buy swamp, cost: ${
+    upgradeArr[1].cost.toFixed(2)
+  } Frogs, units: ${upgradeArr[1].units}`;
+  marshButton.textContent = `Buy marsh, cost: ${
+    upgradeArr[2].cost.toFixed(2)
+  } Frogs, units: ${upgradeArr[2].units}`;
+  pondButton.disabled = count < upgradeArr[0].cost;
+  swampButton.disabled = count < upgradeArr[1].cost;
+  marshButton.disabled = count < upgradeArr[2].cost;
+}
 
 //------------------------------------------------------------------------------------INITIALIZE GAME STATE--------------------------------------------------------
 
@@ -52,31 +91,43 @@ frogButton.addEventListener("click", () => {
 // ----------------------------------------------------------BUY POND BUTTON--------------------------------
 // create 'buy pond' button, its disabled until frogs = 10;
 const pondButton = document.createElement("button");
-pondButton.textContent = `Buy Pond, cost: 10 Frogs, units: ${
+pondButton.textContent = `Buy Pond, cost: 10.00 Frogs, units: ${
   availableUpgrades[0].units
 }`;
 pondButton.disabled = true;
+pondButton.id = "pondButton";
 document.body.append(pondButton); // code for when button becomes clickable in "button click" listener
 
 // ---------------BUY SWAMP BUTTON--------------------------------
 // create 'buy swamp' button, its disabled until frogs = 100;
 const swampButton = document.createElement("button");
-swampButton.textContent = `Buy swamp, cost: 100 Frogs, units: ${
+swampButton.textContent = `Buy swamp, cost: 100.00 Frogs, units: ${
   availableUpgrades[1].units
 }`;
 swampButton.disabled = true;
+swampButton.id = "swampButton";
 document.body.append(swampButton); // code for when button becomes clickable in "button click" listener
 
 // ---------------BUY MARSH BUTTON--------------------------------
 // create 'buy marsh' button, its disabled until frogs = 1000;
 const marshButton = document.createElement("button");
-marshButton.textContent = `Buy marsh, cost: 1000 Frogs, units: ${
+marshButton.textContent = `Buy marsh, cost: 1000.00 Frogs, units: ${
   availableUpgrades[2].units
 }`;
 marshButton.disabled = true;
+marshButton.id = "marshButton";
 document.body.append(marshButton); // code for when button becomes clickable in "button click" listener
 
 // -----------------------------------------------------------------------CREATE BUTTON LISTENERS--------------------------------------------------
+
+// -------------------------------CREATE BUTTON DICTIONARY--------------
+const upgradeButtons: { [key: string]: HTMLButtonElement } = {
+  pond: document.getElementById("pondButton") as HTMLButtonElement,
+  swamp: document.getElementById("swampButton") as HTMLButtonElement,
+  marsh: document.getElementById("marshButton") as HTMLButtonElement,
+};
+
+// -------------------------CREATE LISTENERS FOR EACH BUTTON--------------
 for (let i = 0; i < 3; i++) {
   upgradeButtons[availableUpgrades[i].name].addEventListener("click", () => {
     updateCount(count -= availableUpgrades[i].cost, availableUpgrades);
@@ -86,189 +137,3 @@ for (let i = 0; i < 3; i++) {
     growthRate = growthRate + availableUpgrades[i].rate;
   });
 }
-
-/*
-const POND_MODIFIER = 0.1;
-const SWAMP_MODIFIER = 2;
-const MARSH_MODIFIER = 50;
- <<<<<<<<<<<-----------------------should be useless now------------------------
-let pondUnits = 0;
-let swampUnits = 0;
-let marshUnits = 0;
-let pondCost = 10;
-let swampCost = 100;
-let marshCost = 1000;
-*/
-
-// --------------------BEGIN REFACTOR------------------------
-
-/*
-pondButton.addEventListener("click", () => {
-  updateCount(count -= pondCost, availableUpgrades);
-  autoIncreasePond();
-  pondUnits++;
-  pondCost = pondCost * COST_MULTIPLIER;
-  // update growth rate
-  growthRate = growthRate + POND_MODIFIER;
-});
-*/
-
-//---------------------------------------------------------------------REFACTORED AUTO INCREMENT FUNCTION----------------------------------------------------------
-function autoIncrease(upgradeType: upgrade): void {
-  // build increment timer that uses requestAnimationFrame and uses delta time
-  let lastTime = performance.now();
-  // updates count based on timeDelta
-  const update = (currentTime: number) => {
-    // compute delta time
-    const deltaTime = (currentTime - lastTime) / 1000;
-    lastTime = currentTime;
-    // add fractional amount to count
-    updateCount(count += upgradeType.rate * deltaTime, availableUpgrades);
-    // schedule next frame
-    requestAnimationFrame(update); // requestAnimationUpdate feeds currentTime to update function
-  };
-  // first call to requestAnimationFrame, subsequent calls made from within 'update' function
-  requestAnimationFrame(update);
-}
-
-//--------------------------------------------------------------------REFACTORED DISPLAY UPDATE FUNCTION---------------------------------------------------------
-function updateCount(newCount: number, upgradeArr: upgrade[]) {
-  if (newCount < 0) {
-    count = 0;
-  } else {
-    count = newCount;
-  }
-  counterDisplay.textContent = `${count.toFixed(2)} Frogs`;
-  growthRateDisplay.textContent = `${growthRate.toFixed(2)} Frogs/sec`;
-  pondButton.textContent = `Buy Pond, cost: ${
-    upgradeArr[0].cost.toFixed(2)
-  } Frogs, units: ${upgradeArr[0].units}`;
-  swampButton.textContent = `Buy swamp, cost: ${
-    upgradeArr[1].cost.toFixed(2)
-  } Frogs, units: ${upgradeArr[1].units}`;
-  marshButton.textContent = `Buy marsh, cost: ${
-    upgradeArr[2].cost.toFixed(2)
-  } Frogs, units: ${upgradeArr[2].units}`;
-  pondButton.disabled = count < upgradeArr[0].cost;
-  swampButton.disabled = count < upgradeArr[1].cost;
-  marshButton.disabled = count < upgradeArr[2].cost;
-}
-
-//-------------END REFACTOR-------------------------------
-
-/*
-//---------DISPLAY UPDATE FUNCTION----------
-function updateCount(newCount: number) {
-  if (newCount < 0) {
-    count = 0;
-  } else {
-    count = newCount;
-  }
-  counterDisplay.textContent = `${count.toFixed(2)} Frogs`;
-  growthRateDisplay.textContent = `${growthRate.toFixed(2)} Frogs/sec`;
-  pondButton.textContent = `Buy Pond, cost: ${
-    pondCost.toFixed(2)
-  } Frogs, units: ${pondUnits}`;
-  swampButton.textContent = `Buy swamp, cost: ${
-    swampCost.toFixed(2)
-  } Frogs, units: ${swampUnits}`;
-  marshButton.textContent = `Buy marsh, cost: ${
-    marshCost.toFixed(2)
-  } Frogs, units: ${marshUnits}`;
-  pondButton.disabled = count < pondCost;
-  swampButton.disabled = count < swampCost;
-  marshButton.disabled = count < marshCost;
-}
-*/
-
-/*
-//-------------------------------------------------------------------------------------AUTO INCREMENT COUNT FOR POND--------------------------------------------------------------------
-function autoIncreasePond(): void {
-  // build increment timer that uses requestAnimationFrame and uses delta time
-  let lastTime = performance.now();
-  // updates count based on timeDelta
-  const update = (currentTime: number) => {
-    // compute delta time
-    const deltaTime = (currentTime - lastTime) / 1000;
-    lastTime = currentTime;
-    // add fractional amount to count
-    updateCount(count += POND_MODIFIER * deltaTime, availableUpgrades);
-    // schedule next frame
-    requestAnimationFrame(update); // requestAnimationUpdate feeds currentTime to update function
-  };
-  // first call to requestAnimationFrame, subsequent calls made from within 'update' function
-  requestAnimationFrame(update);
-}
-
-//----------------------------------------------------------------------------------AUTO INCREMENT COUNT FOR SWAMP--------------------------------------------------------------------------
-function autoIncreaseSwamp(): void {
-  // build increment timer that uses requestAnimationFrame and uses delta time
-  let lastTime = performance.now();
-  // updates count based on timeDelta
-  const update = (currentTime: number) => {
-    // compute delta time
-    const deltaTime = (currentTime - lastTime) / 1000;
-    lastTime = currentTime;
-    // add fractional amount to count
-    updateCount(count += SWAMP_MODIFIER * deltaTime, availableUpgrades);
-    // schedule next frame
-    requestAnimationFrame(update); // requestAnimationUpdate feeds currentTime to update function
-  };
-  // first call to requestAnimationFrame, subsequent calls made from within 'update' function
-  requestAnimationFrame(update);
-}
-
-//----------------------------------------------------------------------------AUTO INCREMENT COUNT FOR MARSH----------------------------------
-function autoIncreaseMarsh(): void {
-  // build increment timer that uses requestAnimationFrame and uses delta time
-  let lastTime = performance.now();
-  // updates count based on timeDelta
-  const update = (currentTime: number) => {
-    // compute delta time
-    const deltaTime = (currentTime - lastTime) / 1000;
-    lastTime = currentTime;
-    // add fractional amount to count
-    updateCount(count += MARSH_MODIFIER * deltaTime, availableUpgrades);
-    // schedule next frame
-    requestAnimationFrame(update); // requestAnimationUpdate feeds currentTime to update function
-  };
-  // first call to requestAnimationFrame, subsequent calls made from within 'update' function
-  requestAnimationFrame(update);
-}
-*/
-
-/*
-// when purchased begin to auto increment frog count
-pondButton.addEventListener("click", () => {
-  updateCount(count -= pondCost, availableUpgrades);
-  autoIncreasePond();
-  pondUnits++;
-  pondCost = pondCost * COST_MULTIPLIER;
-  // update growth rate
-  growthRate = growthRate + POND_MODIFIER;
-});
-*/
-
-/*
-// when purchased begin to auto increment frog count
-swampButton.addEventListener("click", () => {
-  updateCount(count -= swampCost, availableUpgrades);
-  autoIncreaseSwamp();
-  swampUnits++;
-  swampCost = swampCost * COST_MULTIPLIER;
-  // update growth rate
-  growthRate = growthRate + SWAMP_MODIFIER;
-});
-*/
-
-/*
-// when purchased begin to auto increment frog count
-marshButton.addEventListener("click", () => {
-  updateCount(count -= marshCost, availableUpgrades);
-  autoIncreaseMarsh();
-  marshUnits++;
-  marshCost = marshCost * COST_MULTIPLIER;
-  // update growth rate
-  growthRate = growthRate + MARSH_MODIFIER;
-});
-*/
