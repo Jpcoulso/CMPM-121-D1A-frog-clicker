@@ -138,7 +138,7 @@ function updateCount(newCount: number) {
   for (const upgrade of availableUpgrades) {
     upgradeButtons[upgrade.name].textContent = `Buy ${upgrade.name}, cost: ${
       upgrade.cost.toFixed(2)
-    } Frogs, units: ${upgrade.units}`;
+    } Frogs, units: ${upgrade.units}\n${upgrade.description}`;
     upgradeButtons[upgrade.name].disabled = count < upgrade.cost;
   }
 }
