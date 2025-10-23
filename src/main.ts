@@ -1,7 +1,7 @@
 import "./style.css";
 
 // --------------------------------------------------------------------------VARIABLES AND DATA STRUCTURES----------------------------------
-let count: number = 100000;
+let count: number = 0;
 let growthRate = 0;
 const COST_MULTIPLIER = 1.15;
 
