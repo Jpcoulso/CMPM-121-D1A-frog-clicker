@@ -9,7 +9,7 @@ interface upgrade {
   name: string;
   cost: number;
   rate: number;
-  units: number;
+  purchasedCount: number;
   description: string;
 }
 
@@ -18,35 +18,35 @@ const availableUpgrades: upgrade[] = [
     name: "pond",
     cost: 10,
     rate: 0.1,
-    units: 0,
+    purchasedCount: 0,
     description: "a small body of water for frogs to hang in",
   },
   {
     name: "swamp",
     cost: 100,
     rate: 2,
-    units: 0,
+    purchasedCount: 0,
     description: "frogs get to hangout with shrek",
   },
   {
     name: "marsh",
     cost: 1000,
     rate: 50,
-    units: 0,
+    purchasedCount: 0,
     description: "like a town, but for frogs",
   },
   {
     name: "bog",
     cost: 10000,
     rate: 100,
-    units: 0,
+    purchasedCount: 0,
     description: "basically a bigger marsh",
   },
   {
     name: "terraformer",
     cost: 50000,
     rate: 1000,
-    units: 0,
+    purchasedCount: 0,
     description:
       "burn their cities and grind their bones, we shall wipe humanity off the face of the earth and reclaim the land that is rightfully ours",
   },
@@ -84,7 +84,7 @@ function updateCount(newCount: number) {
   for (const upgrade of availableUpgrades) {
     upgradeButtons[upgrade.name].textContent = `Buy ${upgrade.name}, cost: ${
       upgrade.cost.toFixed(2)
-    } Frogs, units: ${upgrade.units}\n${upgrade.description}`;
+    } Frogs, Units: ${upgrade.purchasedCount}\n${upgrade.description}`;
     upgradeButtons[upgrade.name].disabled = count < upgrade.cost; // disabled to prevent invalid purchases (enabled when player has enough frogs)
   }
 }
@@ -124,7 +124,7 @@ for (const upgrade of availableUpgrades) {
   button.classList.add("upgradeButton");
   button.textContent = `Buy ${upgrade.name}, cost: ${
     upgrade.cost.toFixed(2)
-  } Frogs, units: ${upgrade.units}\n${upgrade.description}`;
+  } Frogs, Units: ${upgrade.purchasedCount}\n${upgrade.description}`;
   button.disabled = true;
   document.body.appendChild(button);
   upgradeButtons[upgrade.name] = button;
@@ -137,7 +137,7 @@ for (const upgrade of availableUpgrades) {
   upgradeButtons[upgrade.name].addEventListener("click", () => {
     updateCount(count -= upgrade.cost);
     autoIncrease(upgrade);
-    upgrade.units++;
+    upgrade.purchasedCount++;
     upgrade.cost = upgrade.cost * COST_MULTIPLIER;
     growthRate = growthRate + upgrade.rate;
   });
