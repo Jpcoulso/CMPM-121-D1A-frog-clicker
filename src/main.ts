@@ -66,7 +66,7 @@ function autoIncrease(upgrade: upgrade): void {
     // add fractional amount to count
     updateCount(count += upgrade.rate * deltaTime);
     // schedule next frame
-    requestAnimationFrame(update); // requestAnimationUpdate feeds currentTime to update function
+    requestAnimationFrame(update); // update occurs as browser is refreshed leading to better optimization
   };
   // first call to requestAnimationFrame, subsequent calls made from within 'update' function
   requestAnimationFrame(update);
@@ -85,7 +85,7 @@ function updateCount(newCount: number) {
     upgradeButtons[upgrade.name].textContent = `Buy ${upgrade.name}, cost: ${
       upgrade.cost.toFixed(2)
     } Frogs, units: ${upgrade.units}\n${upgrade.description}`;
-    upgradeButtons[upgrade.name].disabled = count < upgrade.cost;
+    upgradeButtons[upgrade.name].disabled = count < upgrade.cost; // disabled to prevent invalid purchases (enabled when player has enough frogs)
   }
 }
 
