@@ -52,6 +52,43 @@ const availableUpgrades: upgrade[] = [
   },
 ];
 
+//------------------------------------------------------------------------------------------------------------------------------FUNCTIONS----------------------------------------------------
+
+//---------------------------------------------------------------------REFACTORED AUTO-INCREMENT FUNCTION----------------
+function autoIncrease(upgrade: upgrade): void {
+  // build increment timer that uses requestAnimationFrame and uses delta time
+  let lastTime = performance.now();
+  // updates count based on timeDelta
+  const update = (currentTime: number) => {
+    // compute delta time
+    const deltaTime = (currentTime - lastTime) / 1000;
+    lastTime = currentTime;
+    // add fractional amount to count
+    updateCount(count += upgrade.rate * deltaTime);
+    // schedule next frame
+    requestAnimationFrame(update); // requestAnimationUpdate feeds currentTime to update function
+  };
+  // first call to requestAnimationFrame, subsequent calls made from within 'update' function
+  requestAnimationFrame(update);
+}
+
+//-----------------------------------------------------------------------REFACTORED DISPLAY/COUNT UPDATE FUNCTION--------------
+function updateCount(newCount: number) {
+  if (newCount < 0) {
+    count = 0;
+  } else {
+    count = newCount;
+  }
+  counterDisplay.textContent = `${count.toFixed(2)} Frogs`;
+  growthRateDisplay.textContent = `${growthRate.toFixed(2)} Frogs/sec`;
+  for (const upgrade of availableUpgrades) {
+    upgradeButtons[upgrade.name].textContent = `Buy ${upgrade.name}, cost: ${
+      upgrade.cost.toFixed(2)
+    } Frogs, units: ${upgrade.units}\n${upgrade.description}`;
+    upgradeButtons[upgrade.name].disabled = count < upgrade.cost;
+  }
+}
+
 //------------------------------------------------------------------------------------------------------------------------INITIALIZE GAME STATE--------------------------------------------------------
 
 // -------------------------------------------------------CREATE COUNTER DISPLAY-------------------
@@ -104,41 +141,4 @@ for (const upgrade of availableUpgrades) {
     upgrade.cost = upgrade.cost * COST_MULTIPLIER;
     growthRate = growthRate + upgrade.rate;
   });
-}
-
-//------------------------------------------------------------------------------------------------------------------------------FUNCTIONS----------------------------------------------------
-
-//---------------------------------------------------------------------REFACTORED AUTO-INCREMENT FUNCTION----------------
-function autoIncrease(upgrade: upgrade): void {
-  // build increment timer that uses requestAnimationFrame and uses delta time
-  let lastTime = performance.now();
-  // updates count based on timeDelta
-  const update = (currentTime: number) => {
-    // compute delta time
-    const deltaTime = (currentTime - lastTime) / 1000;
-    lastTime = currentTime;
-    // add fractional amount to count
-    updateCount(count += upgrade.rate * deltaTime);
-    // schedule next frame
-    requestAnimationFrame(update); // requestAnimationUpdate feeds currentTime to update function
-  };
-  // first call to requestAnimationFrame, subsequent calls made from within 'update' function
-  requestAnimationFrame(update);
-}
-
-//-----------------------------------------------------------------------REFACTORED DISPLAY/COUNT UPDATE FUNCTION--------------
-function updateCount(newCount: number) {
-  if (newCount < 0) {
-    count = 0;
-  } else {
-    count = newCount;
-  }
-  counterDisplay.textContent = `${count.toFixed(2)} Frogs`;
-  growthRateDisplay.textContent = `${growthRate.toFixed(2)} Frogs/sec`;
-  for (const upgrade of availableUpgrades) {
-    upgradeButtons[upgrade.name].textContent = `Buy ${upgrade.name}, cost: ${
-      upgrade.cost.toFixed(2)
-    } Frogs, units: ${upgrade.units}\n${upgrade.description}`;
-    upgradeButtons[upgrade.name].disabled = count < upgrade.cost;
-  }
 }
