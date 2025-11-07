@@ -10,14 +10,124 @@
   height: 400px;
   background-image: url("./public/assets/frogFace.jpg");
   background-size: cover;
-  border: 3px solid #4caf50;
-  border-radius: 15px;
+  border: 4px solid #2e7d32;
+  border-radius: 20px;
   cursor: pointer;
-  margin: 10px;
+  margin-bottom: 20px;
+  transition: transform 0.1s;
+}
+
+.frogButton:active {
+  transform: scale(0.95);
 }
 
 .upgradeButton {
+  padding: 15px;
+  width: 220px;
+  font-size: 16px;
+  border: 2px solid #d68b2a; /* darker orange border */
+  border-radius: 10px;
+  text-align: left;
+  background-color: #ffda9e; /* ✅ light orange */
+  cursor: pointer;
   white-space: pre-line;
-  text-align: start;
-  padding: 8px;
+  transition: background-color 0.2s, transform 0.1s;
+}
+
+.upgradeButton:hover:not(:disabled) {
+  background-color: #ffd48a; /* slightly brighter on hover */
+}
+
+.upgradeButton:active:not(:disabled) {
+  transform: scale(0.97); /* click animation */
+}
+
+.upgradeButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* colored background inspired by https://thatguyiain.github.io/cmpm-121-incremental-game/ */
+body {
+  background-color: #d0f5c0; /* light soft green */
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+.pageLayout {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 20px;
+}
+
+.upgradePanel {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/*frog themed header inspired by https://mgembree.github.io/cmpm-121-f25-mattembree/ */
+.frogHeader {
+  background: linear-gradient(#8eea7b, #66c25f);
+  color: #074d19;
+  text-align: center;
+  padding: 20px 0;
+  font-family: "Trebuchet MS", sans-serif;
+  border-bottom: 5px solid #4caf50;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.frogHeader h1 {
+  font-size: 3rem;
+  margin: 0;
+  text-shadow: 2px 2px #baf6a8;
+}
+
+.frogHeader p {
+  margin: 5px 0 0;
+  font-size: 1.3rem;
+  opacity: 0.9;
+}
+
+.pageLayout {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 60px;
+  padding: 30px;
+  margin-top: 20px;
+}
+
+.leftPanel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.upgradePanel {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-right: 40px;
+}
+
+/* style inspiration for the frog counter and frogs/sec counter comes from https://mgembree.github.io/cmpm-121-f25-mattembree/ */
+.counterContainer {
+  margin-top: 15px; /* spacing under frog */
+  padding: 12px 16px;
+  background-color: #e8ffe0; /* soft green background */
+  border: 2px solid #4caf50; /* frog green border */
+  border-radius: 12px;
+  width: 260px; /* matches nicely with frog button width */
+  text-align: center;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+}
+
+.counterContainer div {
+  font-size: 1.3rem;
+  margin: 4px 0;
+  font-weight: bold;
+  color: #2e7d32;
+  text-shadow: 1px 1px #c9f7c2;
 }

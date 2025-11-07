@@ -91,26 +91,61 @@ function updateCount(newCount: number) {
 
 //------------------------------------------------------------------------------------------------------------------------INITIALIZE GAME STATE--------------------------------------------------------
 
+//-------------------------------------------------Create frog themed header, inspired by https://mgembree.github.io/cmpm-121-f25-mattembree/
+const header = document.createElement("header");
+header.classList.add("frogHeader");
+header.innerHTML = `
+  <h1>🐸 Frog Clicker 🐸</h1>
+  <p>Grow your frog empire!</p>
+`;
+document.body.prepend(header);
+
+// -------------------------------------------------Create main layout container
+const layout = document.createElement("div");
+layout.classList.add("pageLayout");
+document.body.appendChild(layout);
+
+// ---------------------------------------------Create left side (frog button + counters)
+const leftPanel = document.createElement("div");
+layout.appendChild(leftPanel);
+leftPanel.classList.add("leftPanel");
+
+// ------------------------------------------------Create right side (upgrade buttons)
+const upgradePanel = document.createElement("div");
+upgradePanel.classList.add("upgradePanel");
+layout.appendChild(upgradePanel);
+
 // -------------------------------------------------------CREATE COUNTER DISPLAY-------------------
 const counterDisplay = document.createElement("div");
-document.body.appendChild(counterDisplay);
+leftPanel.appendChild(counterDisplay);
 // create counterDisplay update function
 counterDisplay.textContent = `${count.toFixed(2)} Frogs`;
 
 //--------------------------------------------------------CREATE FROGS/SEC DISPLAY------------------
 const growthRateDisplay = document.createElement("div");
-document.body.appendChild(growthRateDisplay);
+leftPanel.appendChild(growthRateDisplay);
 growthRateDisplay.textContent = `${growthRate.toFixed(2)} Frogs/sec`;
+
+const counterContainer = document.createElement("div");
+counterContainer.classList.add("counterContainer");
+leftPanel.appendChild(counterContainer);
+
+// Move these into the counterContainer:
+counterContainer.appendChild(counterDisplay);
+counterContainer.appendChild(growthRateDisplay);
 
 // --------------------------------------------------------CREATE FROG BUTTON-----------------------
 // Create the button element, add css style, append so it shows up
 const frogButton = document.createElement("button");
 frogButton.classList.add("frogButton");
-document.body.appendChild(frogButton);
+leftPanel.appendChild(frogButton);
 // On click increase count by 1
 frogButton.addEventListener("click", () => {
   updateCount(count += 1);
 });
+
+leftPanel.appendChild(frogButton);
+leftPanel.appendChild(counterContainer);
 
 //-----------------------------------------------------------------------------------------------------------------------INITIALIZE UPGRADE BUTTONS---------------------------------------
 
@@ -126,7 +161,7 @@ for (const upgrade of availableUpgrades) {
     upgrade.cost.toFixed(2)
   } Frogs, Units: ${upgrade.purchasedCount}\n${upgrade.description}`;
   button.disabled = true;
-  document.body.appendChild(button);
+  upgradePanel.appendChild(button);
   upgradeButtons[upgrade.name] = button;
 }
 
