@@ -22,6 +22,8 @@
 }
 
 .upgradeButton {
+  font-weight: bold;
+  color: #d68b2a;
   padding: 15px;
   width: 220px;
   font-size: 16px;
@@ -131,3 +133,16 @@ body {
   color: #2e7d32;
   text-shadow: 1px 1px #c9f7c2;
 }
+/*
+.upgrade-btn-text {
+  font-weight: bold;
+  color: #fff;
+  text-shadow: 1px 1px 2px #333;
+  font-size: 1.1em;
+  letter-spacing: 0.5px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: linear-gradient(90deg, #6a4caf 0%, #b47cff 100%);
+  box-shadow: 0 2px 6px rgba(106,76,175,0.15);
+}
+*/

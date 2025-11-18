@@ -157,6 +157,7 @@ for (const upgrade of availableUpgrades) {
   const button = document.createElement("button");
   button.id = `${upgrade.name}Button`;
   button.classList.add("upgradeButton");
+  button.classList.add("upgrade-btn-text");
   button.textContent = `Buy ${upgrade.name}, cost: ${
     upgrade.cost.toFixed(2)
   } Frogs, Units: ${upgrade.purchasedCount}\n${upgrade.description}`;
